@@ -3,7 +3,7 @@ import Sidebar from "../../components/sidebar/Sidebar"
 import "./new.scss"
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined"
 import { useEffect, useState } from "react"
-import { addDoc, collection, doc, setDoc, serverTimestamp } from "firebase/firestore"
+import { doc, setDoc, serverTimestamp } from "firebase/firestore"
 import { auth, db, storage } from "../../firebase"
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
@@ -17,14 +17,15 @@ const New = ({ inputs, title }) => {
 
   useEffect(() => {
     const uploadFile = () => {
-      const name = new Date().getTime() + file.name
+      // const name = new Date().getTime() + file.name
       const storageRef = ref(storage, file.name)
       const uploadTask = uploadBytesResumable(storageRef, file)
 
       uploadTask.on(
         "state_changed",
         snapshot => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           console.log("Upload is " + progress + "% done")
           setPerc(progress)
           switch (snapshot.state) {
